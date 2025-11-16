@@ -1,10 +1,25 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Plus, Minus, RotateCcw } from "lucide-react";
 
 const Counter = () => {
   const [count, setCount] = useState(0);
+  const audio67 = useRef(new Audio('/67.mp3'));
+  const audio21 = useRef(new Audio('/21.mp3'));
+
+  useEffect(() => {
+    audio67.current.load();
+    audio21.current.load();
+  }, []);
+
+  useEffect(() => {
+    if (count === 7) {
+      audio67.current.play();
+    } else if (count === 21) {
+      audio21.current.play();
+    }
+  }, [count]);
 
   const increment = () => setCount(count + 1);
   const decrement = () => setCount(count - 1);
