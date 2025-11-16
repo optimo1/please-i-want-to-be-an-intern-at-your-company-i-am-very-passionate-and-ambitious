@@ -7,10 +7,12 @@ const Counter = () => {
   const [count, setCount] = useState(0);
   const audio67 = useRef(new Audio('/67.mp3'));
   const audio21 = useRef(new Audio('/21.mp3'));
+  const audio100 = useRef(new Audio('/victory.mp3'));
 
   useEffect(() => {
     audio67.current.load();
     audio21.current.load();
+    audio100.current.load();
   }, []);
 
   useEffect(() => {
@@ -18,15 +20,31 @@ const Counter = () => {
       audio67.current.play();
     } else if (count === 21) {
       audio21.current.play();
+    } else if (count === 100) {
+      audio100.current.play();
     }
   }, [count]);
 
-  const increment = () => setCount(count + 1);
-  const decrement = () => setCount(count - 1);
+  const increment = () => setCount(c => Math.min(100, c + 1));
+  const decrement = () => setCount(c => Math.max(-100, c - 1));
   const reset = () => setCount(0);
 
   return (
-    <Card className="w-full max-w-md p-12 shadow-lg border-border/50">
+    <Card className="w-full max-w-md p-12 shadow-lg border-border/50 relative">
+      {(count === 6 || count === 7) && (
+        <>
+          <img src="/67-1.jpg" alt="67-1" className="absolute top-0 right-0 w-64 h-64" style={{ transform: 'translate(70%, -70%)' }} />
+          <img src="/67-2.gif" alt="67-2" className="absolute top-1/2 left-0 w-64 h-64" style={{ transform: 'translate(-70%, -50%)' }} />
+          <img src="/67.gif" alt="67" className="absolute bottom-0 right-0 w-64 h-64" style={{ transform: 'translate(70%, 70%)' }} />
+        </>
+      )}
+      {count === 21 && (
+        <>
+          <img src="/21-1.gif" alt="21-1" className="absolute top-0 right-0 w-64 h-64" style={{ transform: 'translate(70%, -70%)' }} />
+          <img src="/21-2.png" alt="21-2" className="absolute top-1/2 left-0 w-64 h-64" style={{ transform: 'translate(-70%, -50%)' }} />
+          <img src="/21-3.avif" alt="21-3" className="absolute bottom-0 right-0 w-64 h-64" style={{ transform: 'translate(70%, 70%)' }} />
+        </>
+      )}
       <div className="space-y-8">
         <div className="text-center space-y-2">
           <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
@@ -43,6 +61,7 @@ const Counter = () => {
             variant="outline"
             size="lg"
             className="flex-1 h-14 text-base font-medium hover:bg-secondary/80 transition-colors"
+            disabled={count <= -100}
           >
             <Minus className="mr-2 h-5 w-5" />
             Decrease
@@ -52,6 +71,7 @@ const Counter = () => {
             onClick={increment}
             size="lg"
             className="flex-1 h-14 text-base font-medium shadow-sm hover:shadow-md transition-all"
+            disabled={count >= 100}
           >
             <Plus className="mr-2 h-5 w-5" />
             Increase
