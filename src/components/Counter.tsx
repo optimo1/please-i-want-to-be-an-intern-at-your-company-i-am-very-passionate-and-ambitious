@@ -8,26 +8,64 @@ const Counter = () => {
   const audio67 = useRef(new Audio('/67.mp3'));
   const audio21 = useRef(new Audio('/21.mp3'));
   const audio100 = useRef(new Audio('/victory.mp3'));
+  const audioHell = useRef(new Audio('/hell.flac'));
 
   useEffect(() => {
     audio67.current.load();
     audio21.current.load();
     audio100.current.load();
+    audioHell.current.load();
   }, []);
 
   useEffect(() => {
+    if (count === 100 || count === -100) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+
     if (count === 7) {
       audio67.current.play();
     } else if (count === 21) {
       audio21.current.play();
     } else if (count === 100) {
       audio100.current.play();
+    } else if (count === -100) {
+      audioHell.current.play();
     }
+
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
   }, [count]);
 
   const increment = () => setCount(c => Math.min(100, c + 1));
   const decrement = () => setCount(c => Math.max(-100, c - 1));
   const reset = () => setCount(0);
+
+  if (count === 100 || count === -100) {
+    return (
+      <div className="fixed top-0 left-0 w-screen h-screen">
+        <img
+          src={count === 100 ? "/heaven.png" : "/hell.png"}
+          alt={count === 100 ? "heaven" : "hell"}
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 flex flex-col items-center">
+          {count === 100 && <img src="/victory.png" alt="victory" className="w-96 mb-8" />}
+          <Button
+            onClick={reset}
+            variant="secondary"
+            size="lg"
+            className="h-14 text-base font-medium"
+          >
+            <RotateCcw className="mr-2 h-4 w-4" />
+            Reset
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <Card className="w-full max-w-md p-12 shadow-lg border-border/50 relative">
