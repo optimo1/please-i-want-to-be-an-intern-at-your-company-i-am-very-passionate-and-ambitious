@@ -6,6 +6,7 @@ Hidden Easter Eggs:
  - -100
  - 6
  - 21
+ - 30
  - 100
 
 I set the maximum value to 100 and the minimum to -100 because of the easter eggs, but the program itself can count to an infinite range of real numbers.
